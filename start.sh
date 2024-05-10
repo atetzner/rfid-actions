@@ -39,19 +39,21 @@ xinput disable $INPUT_DEVICE_ID
 
 
 
-# Read raw key events from the RFID reader to get the token ID
-TOKEN_ID=""
-sudo evtest "$RFID_READER_INPUT_DEVICE" | while read line ; do
-  if ! [[ $line =~ .*EV_KEY.*value\ 1 ]] ; then
-    continue
-  fi
+while true ; do
+  # Read raw key events from the RFID reader to get the token ID
+  TOKEN_ID=""
+  sudo evtest "$RFID_READER_INPUT_DEVICE" | while read line ; do
+    if ! [[ $line =~ .*EV_KEY.*value\ 1 ]] ; then
+      continue
+    fi
 
-  KEY="$(echo "$line" | sed 's/.*(KEY_\(.*\)).*/\1/')"
+    KEY="$(echo "$line" | sed 's/.*(KEY_\(.*\)).*/\1/')"
 
-  if [ "$KEY" = "ENTER" ] ; then
-    ./actions.sh $TOKEN_ID
-    TOKEN_ID=""
-  else
-    TOKEN_ID="$TOKEN_ID$KEY"
-  fi
+    if [ "$KEY" = "ENTER" ] ; then
+      ./actions.sh $TOKEN_ID
+      TOKEN_ID=""
+    else
+      TOKEN_ID="$TOKEN_ID$KEY"
+    fi
+  done
 done
