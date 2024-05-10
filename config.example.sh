@@ -3,6 +3,8 @@
 # To find the name, execute
 #   xinput list
 # and copy the name of your RFID reader keyboard device here.
+# 
+# Leave empty if you are running the script on a server without X session
 #
 # Example: Sycreader RFID Technology Co., Ltd SYC ID&IC USB Reader
 RFID_READER_INPUT_NAME=""

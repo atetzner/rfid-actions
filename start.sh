@@ -27,22 +27,24 @@ fi
 
 
 # Disable the RFID reader as normal keyboard input device to inhibit unwanted inputs to user session
-INPUT_DEVICE_ID="$(xinput list --id-only "$RFID_READER_INPUT_NAME" 2>/dev/null)"
-if [ "x$INPUT_DEVICE_ID" = "x" ] ; then
-  echo Could not find input device $RFID_READER_INPUT_NAME
-  exit 5
+if [ "x$RFID_READER_INPUT_NAME" != "x" ] ; then
+  INPUT_DEVICE_ID="$(xinput list --id-only "$RFID_READER_INPUT_NAME" 2>/dev/null)"
+  if [ "x$INPUT_DEVICE_ID" = "x" ] ; then
+    echo Could not find input device $RFID_READER_INPUT_NAME
+    exit 5
+  fi
+
+  trap "xinput enable $INPUT_DEVICE_ID" EXIT
+
+  xinput disable $INPUT_DEVICE_ID
 fi
-
-trap "xinput enable $INPUT_DEVICE_ID" EXIT
-
-xinput disable $INPUT_DEVICE_ID
 
 
 
 while true ; do
   # Read raw key events from the RFID reader to get the token ID
   TOKEN_ID=""
-  sudo evtest "$RFID_READER_INPUT_DEVICE" | while read line ; do
+  sudo evtest --grab "$RFID_READER_INPUT_DEVICE" | while read line ; do
     if ! [[ $line =~ .*EV_KEY.*value\ 1 ]] ; then
       continue
     fi
