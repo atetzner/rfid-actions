@@ -9,7 +9,7 @@ We will use a cheap USB RFID reader to read RFID tags; an example for such a rea
 
 - Check that you have `xinput` and `evtest` installed on your system
 - Copy the `config.example.sh` to `config.sh` and adjust the values in there
-- Edit `actions.sh` and add the actions that should be performed when one of your tokens is presented to the reader
+- Create a script `actions.sh` that will be called with the tag ID as first argument. You may use `actions.example.sh` as starting point.
 
 After that, simply execute `sudo ./start.sh`
 
