@@ -23,7 +23,7 @@ fi
 while true ; do
 	# Read raw key events from the RFID reader to get the token ID
 	TOKEN_ID=""
-	sudo evtest "$RFID_READER_INPUT_DEVICE" | while read line ; do
+	evtest "$RFID_READER_INPUT_DEVICE" | while read line ; do
 		if ! [[ $line =~ .*EV_KEY.*value\ 1 ]] ; then
 			continue
 		fi
